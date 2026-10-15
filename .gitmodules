@@ -1,0 +1,8 @@
+[submodule "upstream/pdfcraft"]
+	path = upstream/pdfcraft
+	url = https://github.com/Azurehawke/pdfcraft.git
+	branch = revucraft
+[submodule "upstream/cadcraft"]
+	path = upstream/cadcraft
+	url = https://github.com/Azurehawke/cadcraft.git
+	branch = main
