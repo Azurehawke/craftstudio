@@ -1,6 +1,6 @@
 # CraftStudio: context and plan
 
-**Status:** planning only. No app code yet, on purpose: RevuCraft and CADCraft get refined first,
+**Status:** planning only. **2026-10-15: direction changed, see §13 first.** No app code yet, on purpose: RevuCraft and CADCraft get refined first,
 then this repo becomes the merged app. Written 2026-10-14.
 
 "CraftStudio" is a working title. Pick the final name before any code or packaging uses it.
@@ -336,3 +336,30 @@ address, fee, appointment and invoice; report templates with Steve's branding.
 **To check before relying on it**: the state's licensing rules and the Standards of Practice that
 apply (state rules, InterNACHI or ASHI) decide what the report must cover; the checklist and
 report template should follow them.
+
+## 13. Direction change: CAD tools inside RevuCraft (2026-10-15)
+
+Steve decided against merging the two apps. Instead, **RevuCraft gains CADCraft's drafting tools**
+and draws on PDF sheets: new sheets in architectural (ARCH A–E) and US standard (ANSI A–E) sizes
+with a drawing scale, lines and walls by coordinates and distances (`@0,15`, `@15<90`, feet-inches),
+snaps, editing, dimensions, cursor coordinates, all on layers and kept editable in the PDF. This
+is the approach of Bluebeam's sketch-to-scale tools.
+
+Why: Steve's deliverable is the PDF (plans, drops, photos, stakeholder report); RevuCraft already
+has page scales, feet-inch measuring, snapping, layers, symbols with counts and photos; and merging
+two document models (§2) was the hardest part of this plan.
+
+What follows from it:
+- The work happens in Azurehawke/pdfcraft (branch `revucraft`); the list lives in its
+  `REVUCRAFT.md` ("Draft tab" and "DWG/DXF round trip").
+- CADCraft stays a separate app for real drafting. Its crates (geometry, DXF, DWG) are reused by
+  RevuCraft as dependencies rather than rewritten.
+- **DWG/DXF round trip** is a goal: export the drawing (layers, symbols as blocks, text,
+  dimensions) at real-world size, change it in CAD, and bring it back onto the PDF sheet at the
+  same scale and origin as a new revision under the existing markup, so markups, photos and
+  counts stay put.
+- Everything else here still applies, now as RevuCraft features: the survey workflow (§11), laser
+  meter and LiDAR input (§11, §12), photos and photo markup, statuses, cable runs, handover,
+  estimating and projects, and home inspections.
+- This repo stays as the plan's home. Sections 2–8 describe the merge that is now not planned;
+  keep them for reference.
