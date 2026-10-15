@@ -167,4 +167,91 @@ Things that make the merge easier if done in the apps first:
 - One repo with both engines as dependencies (this plan), or eventually moving the shell into one
   of the forks?
 - Which look wins: RevuCraft's ribbon or CADCraft's tool sets and command line, per mode?
-- Does the project file (bridge 6) belong in stage 1 or later?
+- Does the project file (bridge 6) belong in stage 1 or later? (2026-10-14: the projects module in
+  §11 makes it the job file; likely early.)
+- Laser meter: does Steve's support Bluetooth keyboard mode? Brand and model, from its label.
+
+## 11. Steve's workflow, and what it changes (added 2026-10-14)
+
+How the last job went (an existing building, no drawings supplied):
+
+1. Mapped the floor plan in LibreCAD by typing coordinates and distances (`@0,15`).
+2. Added layers for the existing electrical outlets, and for lighting with its switches.
+3. Planned where the server/switch rack goes, then the drops.
+4. During the install, changes happened on the fly and had to be redrawn in LibreCAD.
+5. Wanted, and didn't have: photos of the final placement of equipment, marked up, for the future.
+
+At the end, the drawings go to the job's stakeholders.
+
+**What this changes.** The main document is the CAD drawing Steve makes himself; PDFs come in only
+when someone supplies plans. So **Draft mode comes first** and the drawing follows the whole job.
+RevuCraft's PDF markup stays for supplied plans.
+
+### The job, start to finish, in the merged app
+
+| Phase | What the app does |
+|---|---|
+| **Survey** (on site, tablet) | Room-sketch tool built for distances: tap a corner, type `15` and a direction, or `@0,15`; big number pad; walls square by default; rooms close themselves; doors and windows dropped with widths. **Laser meter input** (below) types the number for you. |
+| **Existing conditions** | Preset layers (*Existing – Power*, *Existing – Lighting*, *Existing – Switches*, *New – Data*, *New – Equipment*); an electrical symbol set (receptacles, switches, lights, panels) alongside networking; symbols snap to walls and face the right way. |
+| **Design** | Place the rack and drops with auto-numbered labels (TIA-606 style patterns); **cable runs** from each drop back to the rack with lengths from the drawing, plus service loop and drops; cable counts and footage before ordering. |
+| **Install** | Same file on the tablet; moving a drop keeps where it was planned and where it went; each item goes **Planned → Installed → Tested**; an Install view shows what's left with big buttons. |
+| **Photos** | Take a photo from a drop or the rack and it is pinned there in the drawing; **mark up the photo itself** (arrows, circles, labels, a ruler calibrated from a known size); tapping a symbol shows its photos, status and cable run. |
+| **Handover** | One command makes the stakeholder package (below). |
+
+### Laser distance meter
+
+Steve has a generic Chinese meter with Bluetooth (brand unknown). Two ways in, cheapest first:
+
+1. **Keyboard mode.** Many of these meters can pair as a Bluetooth keyboard and "type" each
+   reading. If his can, the survey tool works with it on day one: the reading lands in the distance
+   field like typed digits. Check the manual or the meter's Bluetooth menu for an HID/keyboard
+   option.
+2. **Its own protocol.** Otherwise the meter speaks Bluetooth Low Energy with a vendor protocol,
+   often a simple serial-style service sending the reading as text. Find it by connecting with a
+   BLE explorer app (e.g. nRF Connect) and taking a reading; then write a small reader for it
+   (Android through JNI; Windows through its Bluetooth API). Support a list of known meters and
+   add more as they are found.
+
+### Handover package for stakeholders
+
+- As-built drawings: PDF (one sheet per floor, title block, legend, revision) and DWG/DXF.
+- Drop and cable schedule (drop ID, room, rack/panel/port, cable type, length, test result).
+- Counts by symbol and layer; equipment list with rack elevation.
+- Photo report by room or drop, with the marked-up photos.
+- Optional: the job file itself, read-only, so the next contractor has everything.
+
+### Money: an estimating and job-costing module
+
+Built on the takeoff, so the numbers come from the drawing rather than being typed twice:
+
+- **Price list**: parts with cost and sell price (cable per foot, jacks, plates, patch panels,
+  racks…), and **labor units** (minutes per drop, per termination, per rack).
+- **Estimate / quote**: counts and cable lengths × prices, labor hours × rate, markup, tax,
+  contingency → a proposal PDF for the customer.
+- **Change orders**: drops added, moved or removed in the field already show in the drawing; the
+  difference from the quoted plan becomes a priced change order to send for approval.
+- **Budget vs actual**: purchases and hours logged against the job; margin as the job goes.
+- **Invoices**: progress or final, from the estimate and approved change orders.
+- Keep accounting out: export to CSV (and QuickBooks-friendly formats) rather than becoming an
+  accounting program.
+
+### Projects: a light project-management module
+
+- A job holds its drawings, PDFs, photos, estimate, schedule and contacts (stakeholders).
+- Phases and tasks tied to the drawing: "terminate 2nd floor" knows its drops and their status, so
+  progress fills in by itself as items are marked Installed and Tested.
+- Schedule (dates and a simple timeline), punch list, daily log with photos, time tracking per
+  task, customer sign-off on the handover.
+- Works offline on the tablet; syncs through Drive.
+
+### Revised order of work
+
+1. CADCraft on the tablet: distance entry and the survey tool; symbols as blocks (shared library
+   with RevuCraft); preset layers; photos pinned to a drawing.
+2. Statuses (Planned/Installed/Tested) and the Install view; photo markup.
+3. Cable runs and the drop/cable schedule; the handover package.
+4. Laser meter (keyboard mode first, then BLE).
+5. Estimating and change orders; then budget vs actual and invoices.
+6. Projects module.
+7. The merged shell (section 5) can come at any point after 1; the modules above live in the
+   engines, so they don't wait for it.
