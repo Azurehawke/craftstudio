@@ -169,7 +169,8 @@ Things that make the merge easier if done in the apps first:
 - Which look wins: RevuCraft's ribbon or CADCraft's tool sets and command line, per mode?
 - Does the project file (bridge 6) belong in stage 1 or later? (2026-10-14: the projects module in
   §11 makes it the job file; likely early.)
-- Laser meter: does Steve's support Bluetooth keyboard mode? Brand and model, from its label.
+- Laser meter (S9, 70 m): does it have a Bluetooth keyboard (HID) mode? Which phone app does it
+  use? The app's name usually points to the maker and its Bluetooth protocol.
 
 ## 11. Steve's workflow, and what it changes (added 2026-10-14)
 
@@ -200,7 +201,8 @@ RevuCraft's PDF markup stays for supplied plans.
 
 ### Laser distance meter
 
-Steve has a generic Chinese meter with Bluetooth (brand unknown). Two ways in, cheapest first:
+Steve's meter: an "S9 229ft/70m Laser Measuring Tool with Phone App" (Amazon, no-name brand; the
+maker and its phone app's name are still to find out). Two ways in, cheapest first:
 
 1. **Keyboard mode.** Many of these meters can pair as a Bluetooth keyboard and "type" each
    reading. If his can, the survey tool works with it on day one: the reading lands in the distance
