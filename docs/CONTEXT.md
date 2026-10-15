@@ -276,6 +276,33 @@ Next to typed distances and the laser meter: a **spinning 2D LiDAR** such as the
   over Wi-Fi or Bluetooth.
 - Bright sunlight degrades these sensors; outdoors, see the lot notes below.
 
+Hardware notes (Steve is looking at the WayPonDEV RPLIDAR C1 kit: sensor, USB adapter board with
+micro-USB, cables):
+- Mount: a small plate between the sensor's base screw holes and the tripod's 1/4"-20 screw (camera
+  plate, plywood with a T-nut, or a 3D-printed adapter); check the C1 datasheet for hole size and
+  spacing.
+- Height about 4 ft (1.2 m): above desks, counters and couch backs, below upper cabinets. Level it
+  (bubble level). Keep cable and adapter board below the spinning head; secure the board.
+- Cable: micro-USB to USB-C (or the kit's cable plus an OTG adapter), 6–10 ft so the user can stand
+  out of the scan.
+
+Processing pipeline (to build later, Steve's call when):
+1. Read the Slamtec protocol; one spin is a ring of a few hundred angle/distance points.
+2. Average several spins; drop outliers (reflections, furniture legs).
+3. Fit straight wall lines to point runs (split-and-merge / RANSAC); a wall fitted through hundreds
+   of points is often within about a centimetre even with 1–3 cm per-point noise.
+4. Intersect neighbouring walls into corners; optional squaring of near-90° corners; gaps become
+   openings and doorways.
+5. Join rooms by matching shared walls or a doorway (automatic, or "these two match").
+6. Check or correct scale against one laser-meter measurement.
+
+Known trouble: glass, mirrors and shiny or very dark surfaces; walls hidden by furniture; areas out
+of line of sight (second position); wall thickness (assume a default or measure at a doorway).
+
+How to make it accurate: build and test against simulated scans of known rooms; add a "record raw
+scan" button; Steve records real rooms with laser-meter measurements of the same walls; tune the
+fitting on those recordings and keep them as regression tests. Two or three rounds expected.
+
 ### Home inspections (Steve is considering them as a side business)
 
 Map the house and lot quickly, pin photos and notes to the plan, and produce the customer report.
